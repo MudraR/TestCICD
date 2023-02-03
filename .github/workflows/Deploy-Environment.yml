@@ -10,6 +10,10 @@ on:
         description: 'Name of the environment you want to deploy to.'
         type: environment
         required: true
+      choice:
+        description: 'choice'
+        type: boolean
+        required: true
 jobs:
   deploy:
     runs-on: ubuntu-latest
