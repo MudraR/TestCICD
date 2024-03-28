@@ -1,0 +1,16 @@
+name: Webhook Triggered Workflow
+
+on:
+  repository_dispatch:
+    types: [TASK.CREATED]
+
+jobs:
+  run-on-webhook:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Run a one-line script
+        run: echo "This workflow was triggered by a webhook event!"
