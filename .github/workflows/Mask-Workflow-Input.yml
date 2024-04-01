@@ -1,3 +1,5 @@
+name: Masking Workflow Input
+
 on:
   workflow_dispatch:
     inputs:
@@ -14,3 +16,4 @@ jobs:
         run: |
           SECRET_PASSWORD=$(cat $GITHUB_EVENT_PATH | jq -r '.inputs.secret_password' )
           echo "::add-mask::$SECRET_PASSWORD"
+          echo "This is my password: $SECRET_PASSWORD" 
