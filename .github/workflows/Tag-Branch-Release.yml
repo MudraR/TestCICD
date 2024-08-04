@@ -7,31 +7,32 @@ on:
 jobs:
   Build: 
     runs-on: ubuntu-latest
-    outputs:
-      targetBranch: ${{ steps.get-release-branch.outputs.targetBranch }}
-      defaultBranch: ${{ steps.get-release-branch.outputs.defaultBranch }}
+#    outputs:
+#      targetBranch: ${{ steps.get-release-branch.outputs.targetBranch }}
+#      defaultBranch: ${{ steps.get-release-branch.outputs.defaultBranch }}
     steps:
-      - uses: actions/checkout@v3
+#      - uses: actions/checkout@v3
 
-      - name: Check target branch of release
-        id: get-release-branch
-        if: github.event_name == 'release'
-        run: |
-          targetBranch=$(gh release view $tag --json targetCommitish -q .[])
-          defaultBranch=$(gh repo view --json defaultBranchRef -q .[].name)
-          echo "targetBranch=$targetBranch" >> "$GITHUB_OUTPUT"
-          echo "defaultBranch=$defaultBranch" >> "$GITHUB_OUTPUT"
-        env:
-          GH_TOKEN: ${{ github.token }}
+#      - name: Check target branch of release
+#        id: get-release-branch
+#        run: |
+#          targetBranch=$(gh release view $tag --json targetCommitish -q .[])
+#          defaultBranch=$(gh repo view --json defaultBranchRef -q .[].name)
+#          echo "The default branch of the repository is $defaultBranch"
+#          echo "The target branch of the release is $targetBranch"
+#          echo "targetBranch=$targetBranch" >> "$GITHUB_OUTPUT"
+#          echo "defaultBranch=$defaultBranch" >> "$GITHUB_OUTPUT"
+          
 
       - name: Build
         run: |
           # Build Commands
-          echo "Building app..."
+          Write-Host "Building app..."
 
   Deploy-To-Staging:
     runs-on: ubuntu-latest
     needs: [Build]
+    if: 
     environment:
       name: Staging
     steps:
@@ -41,7 +42,7 @@ jobs:
   Deploy-To-Production:
     runs-on: ubuntu-latest
     needs: [Build, Deploy-To-Staging]
-    if: needs.Build.outputs.targetBranch == needs.Build.outputs.defaultBranch
+    if: ${{ github.event.release.target_commitish == github.repository.default_branch }}
     environment:
       name: Production
     steps:
