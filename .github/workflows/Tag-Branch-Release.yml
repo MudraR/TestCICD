@@ -27,7 +27,7 @@ jobs:
       - name: Build
         run: |
           # Build Commands
-          Write-Host "Building app..."
+          echo "Building app..."
 
   Deploy-To-Staging:
     runs-on: ubuntu-latest
